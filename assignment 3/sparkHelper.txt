@@ -1,0 +1,39 @@
+
+
+
+from pyspark.sql import functions as F
+df2 = spark.read.csv("file:///home/aneesh/BigData/assignment3/shape.csv", header=True)
+df2 = spark.read.csv("hdfs:///Input/shape.csv", header=True)
+
+
+df.printSchema()
+df.select(F.avg('Total_Strokes')).collect()[0][0]
+df.where(df['word']=='alarm clock').select(F.sum('Total_Strokes')).collect()[0][0]
+df.where(df.word == 'alarm clock').select(F.sum('Total_Strokes')).collect()[0][0]
+df.where((df.word == 'alarm clock') & (df.recognized==True)).select(F.sum('Total_Strokes')).collect()[0][0]
+df.where((df.word == 'alarm clock') & (df.recognized==False)).select(F.avg('Total_Strokes')).collect()[0][0]
+
+
+df2 = df2.drop(df2.word)
+df3 = df.join(df2, df.key_id == df2.key_id)
+
+
+b = df3.where((df3.word == 'alarm clock') & (df3.recognized==False))
+b.show()
+
+
+b.groupby('countrycode').count().withColumnRenamed("count","cnt").filter("cnt < 2")
+
+df3.where((df3.word == 'alarm clock') & (df3.recognized==False)).groupby('countrycode').count().withColumnRenamed("count","cnt").filter("cnt < 2").orderBy(df3.countrycode.asc()).show()
+
+
+
+
+
+
+
+
+spark-submit task1.py alarm clock hdfs:///Input/shape.csv hdfs:///Input/shape_stat.csv
+spark-submit task2.py alarm clock 4 hdfs:///Input/shape.csv hdfs:///Input/shape_stat.csv
+
+

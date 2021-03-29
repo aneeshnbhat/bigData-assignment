@@ -1,0 +1,21 @@
+javac -classpath /home/aneesh/hadoop/hadoop-3.2.1/share/hadoop/common/hadoop-common-3.2.1.jar:/home/aneesh/hadoop/hadoop-3.2.1/share/hadoop/mapreduce/hadoop-mapreduce-client-core-3.2.1.jar:/home/aneesh/hadoop/hadoop-3.2.1/share/hadoop/common/lib/commons-cli-1.2.jar:/usr/local/JSON/json-simple-1.1.1.jar -d /home/aneesh/BigData/assignment1/ *.java
+
+jar -cvf Plane.jar -C /home/aneesh/BigData/assignment1/ab/ .
+
+hadoop fs -put /home/aneesh/BigData/assignment1/plane_carriers_head.ndjson /Input/
+
+/home/aneesh/hadoop/hadoop-3.2.1/bin/hadoop jar /home/aneesh/BigData/assignment1/Plane.jar Plane /Input/plane_carriers.ndjson Output10 "aircraft carrier"
+
+
+
+
+=========PYTHON===========
+
+hadoop jar /home/aneesh/hadoop/hadoop-3.2.1/share/hadoop/tools/lib/hadoop-streaming-3.2.1.jar -file /home/aneesh/BigData/assignment1/mapper.py -mapper mapper.py -file /home/aneesh/BigData/assignment1/reducer.py -reducer reducer.py -input /Input/inp1.txt -output Output18
+
+or
+
+hadoop jar /home/aneesh/hadoop/hadoop-3.2.1/share/hadoop/tools/lib/hadoop-streaming-3.2.1.jar  -mapper "python3 $PWD/mapper.py" -reducer "python3 $PWD/reducer.py" -input "/Input/inp1.txt" -output "Output7"
+
+hadoop jar /home/aneesh/hadoop/hadoop-3.2.1/share/hadoop/tools/lib/hadoop-streaming-3.2.1.jar  -mapper "python3 $PWD/mapper.py 'aircraft carrier'" -reducer "python3 $PWD/reducer.py" -input "/Input/plane_carriers.ndjson" -output "Output7"
+
